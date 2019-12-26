@@ -1,6 +1,7 @@
 require "rubygems"
 require "bundler/setup"
 require "sinatra"
+require "sinatra/contrib/all"
 require "sinatra/cross_origin"
 require "rest-client"
 
@@ -14,6 +15,10 @@ require "rest-client"
   # config CORS
   configure do
     enable :cross_origin
+  end
+
+  configure :development do
+    set :port, '3000'
   end
 
   before do
