@@ -4,9 +4,6 @@ require "sinatra"
 require "sinatra/cross_origin"
 require "rest-client"
 
-  set :bind, '0.0.0.0'
-  set :port, '3000'
-
   # Helpers
   helpers do
     def base_url(path)
