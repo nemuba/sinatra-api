@@ -30,6 +30,11 @@ require "rest-client"
     200
   end
 
+  # route - Root path
+  get '/' do
+    redirect '/books'
+  end
+
   # route - Books all
   get '/books' do
     # content_type :json
