@@ -1,21 +1,28 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    daemons (1.3.1)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
-    eventmachine (1.2.7)
+    dotenv (2.8.1)
     http-accept (1.7.0)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
+    httparty (0.21.0)
+      mini_mime (>= 1.0.0)
+      multi_xml (>= 0.5.2)
     json (2.3.0)
     mime-types (3.3)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2019.1009)
+    mini_mime (1.1.2)
     multi_json (1.14.1)
+    multi_xml (0.6.0)
     mustermann (2.0.2)
       ruby2_keywords (~> 0.0.1)
     netrc (0.11.0)
+    nio4r (2.5.9)
+    puma (6.2.2)
+      nio4r (~> 2.0)
     rack (2.2.6.4)
     rack-protection (2.2.3)
       rack
@@ -25,6 +32,8 @@ GEM
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
     ruby2_keywords (0.0.5)
+    service_client (0.1.10)
+      httparty (~> 0.21.0)
     sinatra (2.2.3)
       mustermann (~> 2.0)
       rack (~> 2.2)
@@ -37,10 +46,6 @@ GEM
       sinatra (= 2.2.3)
       tilt (~> 2.0)
     sinatra-cross_origin (0.4.0)
-    thin (1.7.2)
-      daemons (~> 1.0, >= 1.0.9)
-      eventmachine (~> 1.0, >= 1.0.4)
-      rack (>= 1, < 3)
     tilt (2.0.11)
     unf (0.1.4)
       unf_ext
@@ -50,12 +55,14 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  dotenv
   json
+  puma
   rest-client
+  service_client (~> 0.1.10)
   sinatra
   sinatra-contrib
   sinatra-cross_origin
-  thin
 
 BUNDLED WITH
-   2.0.2
+   2.1.4

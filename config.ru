@@ -1,8 +1,9 @@
 require 'rubygems'
 require 'bundler/setup'
+require 'puma'
 
 Bundler.require
 
 require './app'
 
-run Sinatra::Application
+run App.run!
