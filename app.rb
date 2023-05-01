@@ -3,12 +3,23 @@ require "bundler/setup"
 require "sinatra"
 require "sinatra/contrib/all"
 require "sinatra/cross_origin"
-require "rest-client"
+require "json"
+require "dotenv/load"
+require "uri"
 
-  # Helpers
+class App < Sinatra::Base
+   # Helpers
   helpers do
+    def service
+      ServiceClient::Base
+    end
+
     def base_url(path)
-      "https://bibleapi.co/api#{path}"
+      "#{ENV['API_BIBLE_HOST']}/#{path}"
+    end
+
+    def headers
+      { 'api-key': ENV['API_BIBLE_KEY'] }
     end
   end
 
@@ -18,7 +29,7 @@ require "rest-client"
   end
 
   configure :development do
-    set :port, '3000'
+    set :port, '3001'
   end
 
   before do
@@ -32,35 +43,48 @@ require "rest-client"
     200
   end
 
+  before do
+    content_type :json
+  end
+
   # route - Root path
   get '/' do
-    redirect '/books'
+    redirect '/v1/bibles'
   end
 
   # route - Books all
-  get '/books' do
-    # content_type :json
-    response = RestClient.get(base_url(request.path_info))
-    response
+  get '/v1/bibles' do
+    response = service.get(base_url(""), headers: headers)
+
+    response.data.to_json
   end
 
   # route - Find book with abbreviation
-  get '/books/:abbrev' do
-    # content_type :json
-    response = RestClient.get(base_url(request.path_info))
-    response
+  get '/v1/bibles/books' do
+    response = service.get(base_url("books"), headers: headers)
+    response.data.to_json
   end
 
-  # route - Chapters of the book
-  get '/verses/:version/:book/:chapter' do
-    # content_type :json
-    response = RestClient.get(base_url(request.path_info))
-    response
+  get '/v1/bibles/books/:bookId' do
+    response = service.get(base_url("books/#{params[:bookId]}"), headers: headers)
+    response.data.to_json
   end
 
-  # route - Verses of the chapter
-  get '/verses/:version/:book/:chapter/:number' do
-    # content_type :json
-    response = RestClient.get(base_url(request.path_info))
-    response
+  get '/v1/bibles/books/:bookId/chapters' do
+    response = service.get(base_url("books/#{params[:bookId]}/chapters"), headers: headers)
+    response.data.to_json
   end
+
+  get '/v1/bibles/books/:bookId/chapters' do
+    response = service.get(base_url("books/#{params[:bookId]}/chapters"), headers: headers)
+    response.data.to_json
+  end
+
+  get '/v1/bibles/books/:bookId/chapters/:chapterId' do
+    chapterId = URI.encode(params[:chapterId])
+    
+    response = service.get(base_url("chapters/#{chapterId}"), headers: headers)
+    response.data.to_json
+  end
+end
+  
